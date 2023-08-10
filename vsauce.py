@@ -15,7 +15,6 @@
 #Maybe keep score in a file?
 
 import random
-import time
 
 #Initiate all used variables to 0
 number = 0
