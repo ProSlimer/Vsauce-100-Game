@@ -9,9 +9,7 @@
 #level 3: the computer always plays optimal strategy.
 
 #TODO:
-#Define the counting system for the player and the computer
-#Define each level
-#DONE - Ask the user what difficulty they would like to play
+#Fix the counting system for the player and the computer
 #Maybe keep score in a file?
 
 import random
