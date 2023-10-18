@@ -1,6 +1,6 @@
 
 #!/usr/bin/python3
-#Archer Fortier
+#ProSlimer
 #Vsauce2 - A Game You Can Always Win - https://youtu.be/dUXW3Kh_kxo
 
 #computer vs human: winner is the first to get to 100 without going over.
@@ -8,9 +8,8 @@
 #level 2: computer makes random guess until 50 and then moves to optimal strategy.
 #level 3: the computer always plays optimal strategy.
 
-#TODO:
-#Fix the counting system for the player and the computer
-#Maybe keep score in a file?
+#To Do:
+#Clean up the code a bit. It is kinda hard to follow at this point. I jsut got shit everywhere
 
 import random
 
@@ -20,26 +19,55 @@ useradd = 0
 cpuadd = 0
 turn = 0
 difficulty = 0
+scores = [0, 0]
+
+# Read scores from the file
+file_path = "D:/Documents/PyProjects/Vsauce-100-Game/scores.txt"  # Replace with the actual file path
+try:
+    with open(file_path, "r") as score_file:
+        player_score, computer_score = map(int, score_file.readline().strip().split(","))
+        scores = [computer_score, player_score]  # Update scores based on the file data
+except FileNotFoundError:
+    # Handle the case where the file doesn't exist
+    scores = [0, 0]  # Initialize scores with default values
 
 def start(difficulty):
-    difficulty = 0
-    print("Welcome to The 100 Game!")
-    difficulty = int(input("What difficulty would you like to play? (1-3)\n"))
-    difficulty = int(difficulty)
-    if difficulty > 3 or difficulty < 1:
-        print("That is not a valid difficulty option, please try again.\n")
-        difficulty = 0
-        start(difficulty)
+    while True:
+        try:
+            print(
+                f'''
+                ============================
+                |                          |
+                | Welcome to The 100 Game! |
+                |                          |
+                ============================
+                        SCOREBOARD
+                ============================
+                Player:                    {scores[1]}
+                Computer:                  {scores[0]}
+                '''
+            )
+            input_difficulty = input("What difficulty would you like to play? (1-3)\n")
+            difficulty = int(input_difficulty)
+            if difficulty not in {1, 2, 3}:
+                raise ValueError("Invalid difficulty selection")
+            break  # Exit the loop if a valid difficulty is selected
+        except ValueError:
+            print("That is not a valid difficulty option, please try again.\n")
+    
     return difficulty
 
 def userturn(number):
-    useradd = int(input("Please enter your number. (1-10)\n"))
+    useradd = input("Please enter your number. (1-10)\n")
+    # Convert useradd to an integer
+    useradd = int(useradd)
+    
     if useradd > 10 or useradd < 1:
         print("That number isn't between 1 and 10, please enter a number between 1 and 10")
-        return userturn(number)  # Return the result of the recursive call
+        return userturn(number)
     elif useradd + number > 100:
         print("That number is too high, please enter a smaller number so you don't pass 100")
-        return userturn(number)  # Return the result of the recursive call
+        return userturn(number)
     else:
         number += useradd
         print(f"The new number is {number}.\n")
@@ -55,31 +83,29 @@ def computerrandom(number):
     return number
 
 def computerturn(useradd, difficulty, number):
-    print("DEBUG: `USERADD` after being passed to `COMPUTERTURN` function:", useradd)
     if difficulty == 1:
         number = computerrandom(number)
     elif difficulty == 2:
         if number < 50:
             number = computerrandom(number)
         else:
-            cpuadd = 11 - useradd
+            cpuadd = min(11 - useradd, 100 - number)  # Ensure the total doesn't go over 100
             number += cpuadd
             print(f"The computer chose {cpuadd} the new number is {number}.")
     elif difficulty == 3:
         if useradd == 0:
-            computerrandom(number)
+            number = computerrandom(number)  # Computer chooses a random number if it's turn is first
         else:
-            cpuadd = 11 - useradd
+            cpuadd = min(11 - useradd, 100 - number)  # Ensure the total doesn't go over 100
             number += cpuadd
             print(f"The computer chose {cpuadd} the new number is {number}.")
     else:
-        print(f"difficulty variable is invalid? The current difficulty variable is:{difficulty}. Fix something.")
+        print(f"Difficulty variable is invalid? The current difficulty variable is:{difficulty}. Fix something.")
         quit()
     return number
 
 difficulty = start(difficulty)
 turn = random.randint(0, 1)
-
 if turn == 0:
     print("You get to go first!")
 else:
@@ -95,7 +121,14 @@ while number < 100:
 
 if turn == 0:
     print("The computer wins, better luck next time!")
+    scores[0] += 1  # Increment the computer's score
 elif turn == 1:
     print("You win! Great job!")
+    scores[1] += 1  # Increment the player's score
 else:
     print("The turn variable is invalid. How did you do that? Turn:", turn)
+
+# Save the scores list to a file with the specified path
+file_path = "D:/Documents/PyProjects/Vsauce-100-Game/scores.txt"
+with open(file_path, "w") as score_file:
+    score_file.write(f"{scores[1]},{scores[0]}\n")
