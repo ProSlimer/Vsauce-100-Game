@@ -58,20 +58,21 @@ def start(difficulty):
     return difficulty
 
 def userturn(number):
-    useradd = input("Please enter your number. (1-10)\n")
-    # Convert useradd to an integer
-    useradd = int(useradd)
-    
-    if useradd > 10 or useradd < 1:
-        print("That number isn't between 1 and 10, please enter a number between 1 and 10")
-        return userturn(number)
-    elif useradd + number > 100:
-        print("That number is too high, please enter a smaller number so you don't pass 100")
-        return userturn(number)
-    else:
-        number += useradd
-        print(f"The new number is {number}.\n")
-    return useradd, number
+    while True:
+        useradd = input("Please enter your number. (1-10)\n")
+        try:
+            useradd = int(useradd)
+            if 1 <= useradd <= 10:
+                if useradd + number > 100:
+                    print("That number is too high, please enter a smaller number so you don't pass 100")
+                else:
+                    number += useradd
+                    print(f"The new number is {number}.\n")
+                return useradd, number
+            else:
+                print("That number isn't between 1 and 10, please enter a number between 1 and 10")
+        except ValueError:
+            print("Invalid input. Please enter a valid number between 1 and 10.")
 
 def computerrandom(number):
     cpuadd = random.randint(1, 10)
