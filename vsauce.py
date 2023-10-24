@@ -20,6 +20,8 @@ cpuadd = 0
 turn = 0
 difficulty = 0
 scores = [0, 0]
+max_score = max(scores)
+width = len(str(max_score)) + 1  # Add 1 for padding
 
 # Read scores from the file
 file_path = "D:/Documents/PyProjects/Vsauce-100-Game/scores.txt"  # Replace with the actual file path
@@ -36,17 +38,17 @@ def start(difficulty):
         try:
             print(
                 f'''
-                ============================
-                |                          |
-                | Welcome to The 100 Game! |
-                |                          |
-                ============================
-                        SCOREBOARD
-                ============================
-                Player:                    {scores[1]}
-                Computer:                  {scores[0]}
-                '''
-            )
+    ============================
+    |                          |
+    | Welcome to The 100 Game! |
+    |                          |
+    ============================
+            SCOREBOARD
+    ============================
+    Player:                 {scores[1]:0{width}}  
+    Computer:               {scores[0]:0{width}}  
+    ''')
+            
             input_difficulty = input("What difficulty would you like to play? (1-3)\n")
             difficulty = int(input_difficulty)
             if difficulty not in {1, 2, 3}:
@@ -132,4 +134,4 @@ else:
 # Save the scores list to a file with the specified path
 file_path = "D:/Documents/PyProjects/Vsauce-100-Game/scores.txt"
 with open(file_path, "w") as score_file:
-    score_file.write(f"{scores[1]},{scores[0]}\n")
+    score_file.write(f"{scores[1]:0{width}},{scores[0]}:0{width}\n")
