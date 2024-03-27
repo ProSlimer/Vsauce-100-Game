@@ -1,5 +1,5 @@
 # Vsauce-100-Game
-THis was a challenge provided to me by an instructor.
+This was a challenge provided to me by an instructor.
 The goal is to recreate the game in this video:
   Vsauce2 - A Game You Can Always Win - https://youtu.be/dUXW3Kh_kxo
   
